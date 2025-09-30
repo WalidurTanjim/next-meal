@@ -74,7 +74,7 @@ const Navbar = () => {
                                 </MenuItems>
                             </Menu>
                         </div> :
-                        <button className='px-5 py-1.5 text-sm font-medium text-gray-300 border border-gray-300 rounded-md hover:bg-slate-700'>Sign up</button>
+                        <Link href={'/signup'}><button className='px-5 py-1.5 text-sm font-medium text-gray-300 border border-gray-300 rounded-md hover:bg-slate-700 cursor-pointer'>Sign up</button></Link>
                     }
                 </div>
             </div>
