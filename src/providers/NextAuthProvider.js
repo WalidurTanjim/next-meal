@@ -1,9 +1,11 @@
+import SignInAction from "@/app/actions/auth/SignInAction";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 
 export const authProvider = {
     providers: [
+        // credentials provider
         CredentialsProvider({
             // The name to display on the sign in form (e.g. "Sign in with...")
             name: "Credentials",
@@ -12,12 +14,13 @@ export const authProvider = {
             // e.g. domain, username, password, 2FA token, etc.
             // You can pass any HTML attribute to the <input> tag through the object.
             credentials: {
-                username: { label: "Username", type: "text", placeholder: "jsmith" },
-                password: { label: "Password", type: "password" }
+                email: { label: "Email", type: "email", placeholder: "Email " },
+                password: { label: "Password", type: "password", placeholder: "Password" }
             },
             async authorize(credentials, req) {
                 // Add logic here to look up the user from the credentials supplied
-                const user = { id: "1", name: "J Smith", email: "jsmith@example.com" }
+                const user = await SignInAction(credentials);
+                // console.log("Credentials & user from provider:", credentials, user);
 
                 if (user) {
                     // Any object returned will be saved in `user` property of the JWT
@@ -30,13 +33,20 @@ export const authProvider = {
                 }
             }
         }),
+
+        // github provider
         GitHubProvider({
             clientId: process.env.GITHUB_ID,
             clientSecret: process.env.GITHUB_SECRET
         }),
+
+        // google provider
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET
         })
-    ]
+    ],
+    pages: {
+        signIn: '/signin',
+    }
 }

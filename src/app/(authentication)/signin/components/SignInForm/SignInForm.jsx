@@ -1,9 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { signIn } from "next-auth/react"
+import { useRouter } from "next/navigation";
 
 const SignInForm = () => {
     const [loading, setLoading] = useState(false);
+
+    const router = useRouter();
 
     // handleSubmit
     const handleSubmit = async(e) => {
@@ -16,7 +20,19 @@ const SignInForm = () => {
         const password = form.password.value;
         const payload = { email, password };
 
-       
+        try{
+            const res = await signIn("credentials", { email, password, callbackUrl: '/', redirect: false });
+            // console.log("Response of provider from signin form:", res);
+
+            if(res?.ok){
+                setLoading(false);
+                form.reset();
+                router.push('/');
+            }
+        }catch(err){
+            console.error(err);
+            return;
+        }
     }
 
     return (
