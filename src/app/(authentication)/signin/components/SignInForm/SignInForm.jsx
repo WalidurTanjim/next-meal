@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const SignInForm = () => {
     const [loading, setLoading] = useState(false);
@@ -28,6 +29,8 @@ const SignInForm = () => {
                 setLoading(false);
                 form.reset();
                 router.push('/');
+            }else{
+                toast.error("Authentication failed");
             }
         }catch(err){
             console.error(err);

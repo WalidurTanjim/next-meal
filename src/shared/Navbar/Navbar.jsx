@@ -1,5 +1,8 @@
+"use client";
+
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 
 const navigation = [
@@ -13,7 +16,9 @@ function classNames(...classes) {
 }
 
 const Navbar = () => {
-    const user = false;
+    const session = useSession();
+    const { data: sessionData, status: sessionStatus } = session;
+    // console.log("Session from navbar:", session);
 
     return (
         <Disclosure as="nav" className="relative bg-gray-800">
@@ -45,7 +50,7 @@ const Navbar = () => {
                     </div>
 
                     {
-                        user ? 
+                        sessionStatus === "authenticated" ? 
                         <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                             <button type="button" className="relative rounded-full p-1 text-gray-400 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500">
                                 <span className="absolute -inset-1.5" />
@@ -63,13 +68,13 @@ const Navbar = () => {
 
                                 <MenuItems transition className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg outline outline-black/5 transition data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">
                                     <MenuItem>
-                                        <a href="#" className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden">Your profile</a>
+                                        <Link href="/" className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden">Your profile</Link>
                                     </MenuItem>
                                     <MenuItem>
-                                        <a href="#" className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden">Settings</a>
+                                        <Link href="/" className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden">Settings</Link>
                                     </MenuItem>
                                     <MenuItem>
-                                        <a href="#" className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden">Sign out</a>
+                                        <p className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden cursor-pointer">Sign out</p>
                                     </MenuItem>
                                 </MenuItems>
                             </Menu>
