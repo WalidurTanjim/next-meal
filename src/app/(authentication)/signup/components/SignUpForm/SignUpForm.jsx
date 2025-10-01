@@ -1,11 +1,17 @@
 "use client";
 
 import SignUpAction from "@/app/actions/auth/SignUpAction";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 const SignUpForm = () => {
+    const [loading, setLoading] = useState(false);
+
     // handleSubmit
-    const handleSubmit = async(e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
+        setLoading(true);
 
         const form = e.target;
         const name = form.name.value;
@@ -14,24 +20,28 @@ const SignUpForm = () => {
         const repeat_password = form.repeatPassword.value;
         const payload = { name, email, password, repeat_password };
 
-        if(password !== repeat_password){
-            alert("Both password are must be same");
+        if (password !== repeat_password) {
+            setLoading(false);
+            toast.error("Both password must be same");
             return;
         }
 
-        try{
+        try {
             const res = await SignUpAction(payload);
             // console.log("Response of signup action from signup form:", res);
 
-            if(res?.insertedId){
+            if (res?.insertedId) {
+                setLoading(false);
                 form.reset();
-                alert("Account created successfully")
+                toast.success("Account created successfully")
             }
 
-            if(res?.success == false){
-                alert(res?.message);
+            if (res?.success == false) {
+                setLoading(false);
+                toast.error(res?.message);
             }
-        }catch(err){
+        } catch (err) {
+            setLoading(false);
             console.error(err);
             return;
         }
@@ -63,7 +73,9 @@ const SignUpForm = () => {
                 <input type="text" name="repeatPassword" id="repeatPassword" autoComplete="off" placeholder="Repeat Password" required className="w-full px-3 py-1.5 text-slate-800 border border-gray-300 focus:ring-3 ring-gray-200 rounded outline-none" />
             </div>
 
-            <button className="w-full py-1.5 text-center font-medium text-white border border-blue-300 rounded bg-blue-500 hover:bg-blue-600 active:bg-blue-500">SIGN UP</button>
+            {/* <button disabled={loading} className={`w-full py-1.5 text-center font-medium text-white border border-blue-300 rounded bg-blue-500 hover:bg-blue-600 active:bg-blue-500`}>{loading ? "Submitting..." : "SIGN UP"}</button> */}
+
+            <button type="submit" disabled={loading} className={`w-full py-1.5 text-center font-medium text-white border border-blue-300 rounded ${loading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600 active:bg-blue-500"}`}>{loading ? "Submitting..." : "SIGN UP"}</button>
         </form>
     );
 };
