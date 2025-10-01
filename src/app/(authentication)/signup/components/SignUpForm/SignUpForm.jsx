@@ -73,8 +73,6 @@ const SignUpForm = () => {
                 <input type="text" name="repeatPassword" id="repeatPassword" autoComplete="off" placeholder="Repeat Password" required className="w-full px-3 py-1.5 text-slate-800 border border-gray-300 focus:ring-3 ring-gray-200 rounded outline-none" />
             </div>
 
-            {/* <button disabled={loading} className={`w-full py-1.5 text-center font-medium text-white border border-blue-300 rounded bg-blue-500 hover:bg-blue-600 active:bg-blue-500`}>{loading ? "Submitting..." : "SIGN UP"}</button> */}
-
             <button type="submit" disabled={loading} className={`w-full py-1.5 text-center font-medium text-white border border-blue-300 rounded ${loading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600 active:bg-blue-500"}`}>{loading ? "Submitting..." : "SIGN UP"}</button>
         </form>
     );
