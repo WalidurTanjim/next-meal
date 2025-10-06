@@ -20,7 +20,7 @@ export const authProvider = {
             async authorize(credentials, req) {
                 // Add logic here to look up the user from the credentials supplied
                 const user = await SignInAction(credentials);
-                // console.log("Credentials & user from provider:", credentials, user);
+                console.log("Credentials & user from provider:", credentials, user);
 
                 if(user?.success === false){
                     return null;

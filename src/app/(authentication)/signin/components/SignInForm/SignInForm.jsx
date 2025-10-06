@@ -23,7 +23,7 @@ const SignInForm = () => {
 
         try{
             const res = await signIn("credentials", { email, password, callbackUrl: '/', redirect: false });
-            // console.log("Response of provider from signin form:", res);
+            console.log("Response of provider from signin form:", res);
 
             if(res?.ok){
                 setLoading(false);

@@ -1,11 +1,15 @@
 "use client";
 
 import SignUpAction from "@/app/actions/auth/SignUpAction";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
 const SignUpForm = () => {
     const [loading, setLoading] = useState(false);
+
+    const router = useRouter();
 
     // handleSubmit
     const handleSubmit = async (e) => {
@@ -28,21 +32,33 @@ const SignUpForm = () => {
 
         try {
             const res = await SignUpAction(payload);
-            // console.log("Response of signup action from signup form:", res);
+            console.log("Response of signup action from signup form:", res);
 
             if (res?.insertedId) {
-                setLoading(false);
-                form.reset();
-                toast.success("Account created successfully")
+                try{
+                    const res = await signIn("credentials", { email, password, callbackUrl: '/', redirect: false });
+                    // console.log("Response of signIn from signUp form:", res);
+
+                    if(res?.ok){
+                        toast.success("Account created successfully");
+                        form.reset();
+                        setLoading(false);
+
+                        router.push('/');
+                    }
+                }catch(err){
+                    console.error(err);
+                }
             }
 
             if (res?.success == false) {
-                setLoading(false);
                 toast.error(res?.message);
+                form.reset();
+                setLoading(false);
             }
         } catch (err) {
-            setLoading(false);
             console.error(err);
+            setLoading(false);
             return;
         }
     }
