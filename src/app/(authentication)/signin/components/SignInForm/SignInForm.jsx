@@ -30,6 +30,8 @@ const SignInForm = () => {
                 form.reset();
                 router.push('/');
             }else{
+                setLoading(false);
+                form.reset();
                 toast.error("Authentication failed");
             }
         }catch(err){

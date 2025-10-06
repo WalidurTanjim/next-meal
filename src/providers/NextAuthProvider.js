@@ -22,6 +22,10 @@ export const authProvider = {
                 const user = await SignInAction(credentials);
                 // console.log("Credentials & user from provider:", credentials, user);
 
+                if(user?.success === false){
+                    return null;
+                }
+
                 if (user) {
                     // Any object returned will be saved in `user` property of the JWT
                     return user
