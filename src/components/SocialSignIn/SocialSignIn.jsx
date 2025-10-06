@@ -1,9 +1,12 @@
 "use client";
 
+import { signIn } from "next-auth/react";
+
 const SocialSignIn = () => {
     // handleSignIn
     const handleSignIn = async(providerName) => {
-        console.log("Provider name:", providerName);
+        const result = await signIn(providerName, { redirect: false })
+        // console.log("Social signin provider name & result:", providerName, result);
     }
 
     return (

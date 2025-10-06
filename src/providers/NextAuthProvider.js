@@ -22,7 +22,7 @@ export const authProvider = {
                 const user = await SignInAction(credentials);
                 // console.log("Credentials & user from provider:", credentials, user);
 
-                if(user?.success === false){
+                if (user?.success === false) {
                     return null;
                 }
 
@@ -50,6 +50,24 @@ export const authProvider = {
             clientSecret: process.env.GOOGLE_CLIENT_SECRET
         })
     ],
+    callbacks: {
+        async signIn({ user, account, profile, email, credentials }) {
+            console.log("Callbacks signIn():", user, account, profile, email, credentials);
+            return true
+        },
+        async redirect({ url, baseUrl }) {
+            console.log("Callbacks redirect:", url, baseUrl);
+            return baseUrl
+        },
+        async session({ session, user, token }) {
+            console.log("Callbacks session:", session, user, token);
+            return session
+        },
+        async jwt({ token, user, account, profile, isNewUser }) {
+            console.log("Callbacks jwt:", token, user, account, profile, isNewUser);
+            return token
+        }
+    },
     pages: {
         signIn: '/signin',
     }
