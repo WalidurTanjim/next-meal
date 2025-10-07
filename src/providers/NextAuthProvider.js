@@ -52,20 +52,43 @@ export const authProvider = {
     ],
     callbacks: {
         async signIn({ user, account, profile, email, credentials }) {
-            console.log("Callbacks signIn():", user, account, profile, email, credentials);
+            // console.log("Callbacks signIn():", user, account, profile, email, credentials);
+
+            if (account?.provider === "google") {
+                if (profile?.email && profile?.email_verified === false) {
+                    return false;
+                }
+            }
+
+            if (credentials) {
+                if (!user && !user?.email) {
+                    return false;
+                }
+            }
             return true
         },
         async redirect({ url, baseUrl }) {
-            console.log("Callbacks redirect:", url, baseUrl);
+            // console.log("Callbacks redirect:", url, baseUrl);
             return baseUrl
         },
         async session({ session, user, token }) {
             console.log("Callbacks session:", session, user, token);
-            return session
+            session.user = session.user || {};
+            session.user.id = token.id;
+            session.user.role = token.role;
+            session.accessToken = token.accessToken; // যদি প্রয়োজন হয় (কিন্তু সতর্ক— সেনসিটিভ ডেটা)
+            return session;
         },
         async jwt({ token, user, account, profile, isNewUser }) {
-            console.log("Callbacks jwt:", token, user, account, profile, isNewUser);
-            return token
+            // console.log("Callbacks jwt:", token, user, account, profile, isNewUser);
+            if (user) {
+                token.id = user.id ?? user._id ?? null;
+                token.role = user.role ?? "user";
+                if (account?.access_token) token.accessToken = account.access_token;
+                if (account?.provider) token.provider = account.provider;
+            }
+            // console.log("Token:", token);
+            return token;
         }
     },
     pages: {

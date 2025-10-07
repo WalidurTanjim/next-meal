@@ -22,7 +22,7 @@ const SignUpForm = () => {
         const email = form.email.value;
         const password = form.password.value;
         const repeat_password = form.repeatPassword.value;
-        const payload = { name, email, password, repeat_password, image: "https://static.bangkokpost.com/media/content/20191004/c1_1764659_191004103525.jpg" };
+        const payload = { name, email, password, repeat_password, image: "https://static.bangkokpost.com/media/content/20191004/c1_1764659_191004103525.jpg", role: "user", isActive: true };
 
         if (password !== repeat_password) {
             setLoading(false);
